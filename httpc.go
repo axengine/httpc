@@ -63,6 +63,7 @@ func New(baseUrl string) *HttpC {
 		BaseURL:   baseUrl,
 		URL:       baseUrl,
 		QueryData: url.Values{},
+		SucStatus: 200,
 	}
 	return c
 }
@@ -276,7 +277,8 @@ func (c *HttpC) sendReuqest(method string, out interface{}, recvMediaType ...str
 			}
 		} else {
 			if c.Response.StatusCode != c.SucStatus {
-				c.Error = fmt.Errorf("error http status %d , expect %d", c.Response.StatusCode, c.SucStatus)
+				c.Error = c.readResponse(c.Response, new(string), "text/plain")
+				//c.Error = fmt.Errorf("error http status %d , expect %d", c.Response.StatusCode, c.SucStatus)
 				return c.throwError()
 			}
 		}
