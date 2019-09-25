@@ -278,7 +278,8 @@ func (c *HttpC) sendReuqest(method string, out interface{}, recvMediaType ...str
 		} else {
 			if c.Response.StatusCode != c.SucStatus {
 				var errMsg string
-				c.Error = c.readResponse(c.Response, &errMsg, "text/plain")
+				_ = c.readResponse(c.Response, &errMsg, "text/plain")
+				c.Error = fmt.Errorf("error http status %d , msg %s", c.Response.StatusCode, errMsg)
 				//c.Error = fmt.Errorf("error http status %d , expect %d", c.Response.StatusCode, c.SucStatus)
 				return c.throwError()
 			}
